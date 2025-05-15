@@ -9,7 +9,6 @@ router.get('/', async function(req, res, next) {
         FROM
             clients
     `)
-    console.log(clients)
     res.render('clients/list', { title: 'Клиенты', clients: clients })
 
 });

@@ -24,7 +24,6 @@ router.get('/', async function(req, res, next) {
         FROM
             clients
     `)
-    console.log(clients)
     res.render('orders/list', { title: 'Заказы', orders: orders, clients: clients })
 
 });
@@ -42,7 +41,8 @@ router.post('/create', async function(req, res, next) {
 
 router.get('/:id', async function(req, res) {
 
-    let id = req.params.id
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) return res.status(400).json({ error: 'Некорректный ID' });
 
     let order = await req.db.one(`
         SELECT
@@ -53,13 +53,13 @@ router.get('/:id', async function(req, res) {
             orders.amount AS amount
         FROM
             orders
-        INNER JOIN
+                INNER JOIN
             clients ON clients.id = orders.id_client
-        INNER JOIN
+                INNER JOIN
             order_statuses ON order_statuses.id = orders.id_status
         WHERE
-            orders.id = ${id}
-    `)
+            orders.id = $1
+    `, [id]);
 
     res.render('orders/view', { title: 'Заказ' + order.label, order: order })
 

@@ -13,7 +13,6 @@ router.get('/', async function(req, res, next) {
             users
         INNER JOIN roles ON roles.id = users.id_role
     `)
-    console.log(users)
     res.json({users: users })
 
 });

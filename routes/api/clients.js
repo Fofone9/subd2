@@ -9,7 +9,6 @@ router.get('/', async function(req, res, next) {
         FROM
             clients
     `)
-    console.log(clients)
     res.json({clients: clients })
 
 });
@@ -20,12 +19,14 @@ router.post('/' , async function(req, res, next) {
     res.json({msg:''})
 })
  router.delete('/:id/' , async function(req, res) {
-     let id = req.params.id
+     const id = parseInt(req.params.id, 10);
+     if (isNaN(id)) return res.status(400).json({ error: 'Некорректный ID' });
      await req.db.none(`delete from clients where id=${id}`)
      res.json({msg:''})
  })
 router.get('/:id' , async function(req, res) {
-    let id = req.params.id
+    const id = parseInt(req.params.id, 10);
+    if (isNaN(id)) return res.status(400).json({ error: 'Некорректный ID' });
     let client = await req.db.one(`
     SELECT * FROM clients WHERE id = $1`, id)
     res.json(client)

@@ -16,7 +16,6 @@ router.get('/', async function(req, res, next) {
         INNER JOIN
             orders ON orders.id = payments.id_order
     `)
-    console.log(payments)
     res.render('payments/list', { title: 'Платежи', payments: payments })
 
 });

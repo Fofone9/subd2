@@ -3,7 +3,6 @@ var router = express.Router();
 
 router.post('/login', async function(req, res) {
 
-    console.log(req.body)
     var cookie = await session.login(req, req.body.login, req.body.password)
 
 	if (cookie) {
