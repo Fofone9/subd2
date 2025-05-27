@@ -62,7 +62,9 @@ exports.can = function(user) {
     res.view_payments = user && user.id_role <= 2
     res.view_orders = user && user.id_role <= 3
     res.view_clients = user && user.id_role <= 2
-
+    res.edit_orders = user && user.id_role === 2
+    res.process_payments = user && user.id_role === 2
+    console.log(res)
     return res
 }
 

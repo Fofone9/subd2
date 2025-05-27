@@ -45,6 +45,49 @@ $(document).ready(function(){
 
     })
 
+    $(document).on('click', '.change-status', function() {
+        const id = $(this).data('id')
+        const newStatus = prompt('Введите новый ID статуса:')
+        if (!newStatus) return
 
+        $.post(`/orders/${id}/change-status`, { new_status: newStatus }, function(response) {
+            if (response.msg === '') {
+                alert('Статус обновлён')
+                location.reload()
+            } else {
+                alert(response.msg)
+            }
+        })
+    })
+
+    $(document).on('click', '.process-payment', function() {
+        const id = $(this).data('id');
+        console.log(id);
+        if (!confirm('Провести платёж?')) return;
+
+        // Загрузка данных заказа
+        $.get(`/orders/order/${id}`, function(response) {
+            const order = response;
+            console.log(order);
+
+            if (!order) {
+                alert('Ошибка: заказ не найден');
+                return;
+            }
+
+            const {amount, id_payment_type} = order;
+
+            // Отправка платежа
+            $.post(`/orders/${id}/process-payment`, {amount, id_payment_type}, function(response) {
+                if (response.msg === '') {
+                    alert('Платёж проведён');
+                    location.reload();
+                } else {
+                    alert(response.msg);
+                }
+            });
+        });
+    });
 });
+
 
